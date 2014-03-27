@@ -1,4 +1,4 @@
 bsShowCase
 ==========
 
-The Place for fabulous BS examples
+The place for fabulous BS examples
