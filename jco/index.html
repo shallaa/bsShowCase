@@ -111,8 +111,8 @@
             bs.ANI.tween(bs.Dom('#btFlight').S('opacity', 0, 'this'), 'opacity', 1, 'ease', 'sineOut', 'delay', 2, 'time', 1, 'loop', 1, 'end', loopLight) // 라이트 온오프
             bs.ANI.tween(bs.Dom('#btFlight2').S('opacity', 0, 'this'), 'opacity', 1, 'ease', 'sineOut', 'delay', 2, 'time', 1, 'loop', 1)
             function makeFire() {
-                bs.Sprite('explosion').S('src', '../hika/explosion.png', 'col', 29, 'row', 1);
-                bs.Sprite('explosion2').S('src', '../redcamel/redcamel_test_demo2_asset/fire1.png', 'col', 6, 'row', 4 ),
+                bs.Sprite('explosion').S('src', 'redcamel_test_demo2_asset/explosion.png', 'col', 29, 'row', 1);
+                bs.Sprite('explosion2').S('src', 'redcamel_test_demo2_asset/fire1.png', 'col', 6, 'row', 4 ),
                         bs.Dom('#stage').S('>', bs.Sprite('explosion').S('@0', 'position', 'absolute', 'z-index', 10000000000001, 'div'),
                                 'overflow', 'hidden', 'background', '#000', 'width', w, 'height', h
                         )
