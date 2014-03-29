@@ -38,8 +38,7 @@ bs.plugin('fps', 'last'),
                 'A : left / D : right',
                 'R : up / F : down',
                 'Q : panLeft / E : panRight',
-                'T : tiltUp / G : tiltDown',
-                'space : fire!!'
+                'T : tiltUp / G : tiltDown'
             ]
             for(var i=0; i < 6; i++) {
                 bs.Dom('<div></div>').S('<', 'body', '@id', 'title' + i, 'html', exStrs[i], 'font-size', 11, 'color', '#000', 'top', 60 + 15 * i, 'left', 10)
@@ -137,14 +136,6 @@ bs.plugin('fps', 'last'),
                                 keys['f']=true
                             }, 'up', function($e) {
                                 keys['f']=false
-                            }
-                    )
-
-                    bs.Dom("<input type='button' value='총알발사'>").S('<', '#controller', 'width', 100, 'top', 0, 'left', w / 2 - 50,
-                            'down', function($e) {
-                                keys['space']=true
-                            }, 'up', function($e) {
-                                keys['space']=false
                             }
                     )
 
