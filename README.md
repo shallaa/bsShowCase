@@ -9,15 +9,24 @@ The place for fabulous BS examples
 
 ## ShowCase 내려 받기
 
-bsShowCase의 모든 showcase는 bsShowCase의 bsJS 연구 나무의 bsjs.js를 상대 경로로 참조하고 있습니다.
+bsShowCase의 모든 showcase는 bsJS 연구 나무의 bsjs.js를 상대 경로로 참조하고 있습니다.
 
 그래서 bsShowCase를 내려 받아 로컬에서 사용해보려면 bsShowCase뿐 아니라 bsJS도 모두 아래와 같이 같은 폴더 아래에 받아야 합니다.
 
     ANY-FOLDER
-          └----bsJS           
+          └----bsJS      
+          └----bsJSTest
           └----bsShowCase
 
-bsJS는 <a href='https://github.com/projectBS/bsJS' target='_blank'><strong>여기</strong></a>에서 내려받을 수 있습니다.
+구체적으로 말씀드리면 `ANY-FOLDER`에서 
+
+>git clone https://github.com/projectBS/bsJS.git
+
+>git clone https://github.com/projectBS/bsJSTest.git
+
+>git clone https://github.com/projectBS/bsShowCase.git
+
+를 모두 수행하시면 됩니다.
 
 
 ## ShowCase 추가 하기
