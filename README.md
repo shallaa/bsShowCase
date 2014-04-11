@@ -31,7 +31,7 @@ bsShowCase의 모든 showcase는 bsJS 연구 나무의 bsjs.js를 상대 경로�
 
 ## ShowCase 추가 하기
 
-구경만 하지 마시고 <a href='https://github.com/projectBS/bsTest' target='_blank'><strong>bsTest</strong></a>에서 마음껏 테스트 해 보시고, 여기 **bsShowCase**에도 추가해주세요. 
+구경만 하지 마시고 <a href='https://github.com/projectBS/bsJSTest/' target='_blank'><strong>bsJSTest</strong></a>에서 마음껏 테스트 해 보시고, 여기 **bsShowCase**에도 추가해주세요. 
 
 1. 새로운 showcase를 위한 폴더를 새로 만들어 showcase 작성. **Entry Point가 되는 html 파일의 이름은 반드시 index.html로 만든다.**
 2. 새로운 showcase의 화면 캡쳐 이미지 파일의 이름을 'thumb_SHOWCASE이름.png'로 만들고 bsShowCase/Thumbnails 폴더 내에 저장  
@@ -51,5 +51,17 @@ bsShowCase의 모든 showcase는 bsJS 연구 나무의 bsjs.js를 상대 경로�
     `````
 4. **`git push origin gh-pages`** 또는 *SourceTree*와 같은 Git GUI Tool을 사용하여 bsShowCase에 Push
 5. 1~2분 후 <a href='http://projectbs.github.io/bsShowCase/' target='_blank'>http://projectbs.github.io/bsShowCase/</a>를 방문해서 **lotto** showcase 추가된 것 확인
-  
 
+
+# License
+
+bsJS는 <a href='http://opensource.org/licenses/MIT' target='_blank'><b>MIT 라이선스</b></a> 또는 <a href='http://www.gnu.org/licenses/gpl-2.0.html' target='_blank'><b>GPL v2 라이선스</b></a>로 배포되는 Open Source Software 입니다.
+
+
+# Contact us
+
+<a href='https://www.facebook.com/groups/bs5js/' target='_blank'>bsJS Facebook Group</a>
+
+
+----------
+Copyrightⓒ 2013, ProjectBS Committee. All rights reserved.
