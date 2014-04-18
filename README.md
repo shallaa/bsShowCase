@@ -57,6 +57,8 @@ bsShowCase의 모든 showcase는 bsJS 연구 나무의 bsjs.js를 상대 경로�
 
 bsJS는 <a href='http://opensource.org/licenses/BSD-3-Clause' target='_blank'><b>BSD 라이선스</b></a>로 배포되는 Open Source Software 입니다.
 
+bsJS의 모든 문서는 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target='_blank'><b>크리에이티브 커먼즈 저작자표시-비영리-동일조건변경허락 4.0 국제 라이선스</b></a>에 따라 이용할 수 있습니다.
+
 
 # Contact us
 
@@ -65,3 +67,5 @@ bsJS는 <a href='http://opensource.org/licenses/BSD-3-Clause' target='_blank'><b
 
 ----------
 Copyrightⓒ 2013, ProjectBS Committee. All rights reserved.
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target='_blank'><img alt="크리에이티브 커먼즈 라이선스" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br /><span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">ProjectBS</span>의 저작물인 이 저작물은(는) <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target='_blank'><b>크리에이티브 커먼즈 저작자표시-비영리-동일조건변경허락 4.0 국제 라이선스</b></a>에 따라 이용할 수 있습니다.<br />이 라이선스의 범위 이외의 이용허락을 얻기 위해서는 <a xmlns:cc="http://creativecommons.org/ns#" href="http://www.bsplugin.com" rel="cc:morePermissions" target='_blank'>http://www.bsplugin.com</a>을 참조하십시오.
