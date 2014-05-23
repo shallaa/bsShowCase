@@ -140,7 +140,7 @@ button:active {
 </div>
 <div id="root"></div>
 
-  <script src='http://projectbs.github.io/bsJS/bsjs.0.3.js'></script>
+  <script src='../../../bsJS/bsjs.0.4.js'></script>
 
   <script>
     if (document.location.search.match(/type=embed/gi)) {
@@ -167,16 +167,19 @@ button:active {
         positionProperty  = ['POSITION','static','relative','absolute','fixed'],
         floatingProperty   = ['FLOAT','none','left','right'],
         ClearProperty   = ['CLEAR','none','both','left','right'],
+        sPos = util.optionBuilder(positionProperty),
+        sFloat = util.optionBuilder(floatingProperty),
+        sClear = util.optionBuilder(ClearProperty),
         createBox = function() { 
             bs.Dom('<div id="'+id+'"></div>').S(
               'class', 'box',
-              '>', bs.Dom('<label>'+id+'</label>'),
-              '>', bs.Dom('<select class="position">'+ util.optionBuilder(positionProperty) +'</select>'),
-              '>', bs.Dom('<select class="float">'+ util.optionBuilder(floatingProperty) +'</select>'),
-              '>', bs.Dom('<select class="clear">'+ util.optionBuilder(ClearProperty) +'</select>'),
-              '>', '<button class="add-box">+</button>',
-              '>', '<button class="remove-box">x</button>',
-              '<', '#'+parentId
+              '<', '#'+parentId,
+              '>', '<label>'+id+'</label>',
+							'>', '<select class="position">'+ util.optionBuilder(positionProperty) +'</select>',
+							'>', '<select class="float">'+ util.optionBuilder(floatingProperty) +'</select>',
+							'>', '<select class="clear">'+ util.optionBuilder(ClearProperty) +'</select>',
+							'>', '<button class="add-box">+</button>',
+							'>', '<button class="remove-box">x</button>'
             );
 
             bs.Css(queryId).S(
