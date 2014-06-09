@@ -19,14 +19,13 @@ function onYouTubeIframeAPIReady() {
 }
 
 function onPlayerReady(event) {
-	event.target.playVideo();
+	//event.target.playVideo();
 	player.setLoop(true);
 	//player.setShuffle(true);
 }
 
 function onPlayerStateChange(event) {
 	var els;
-	console.log('onPlayerStateChange')
 	if( event.data == YT.PlayerState.ENDED ){
 		player.nextVideo();
 	}else	if( event.data == YT.PlayerState.PLAYING){
@@ -39,41 +38,39 @@ function onPlayerStateChange(event) {
 		}
 	}
 }
-
+bs.plugin( 'save', 'last' );
 bs(function(){
-	var playlistSave, playlist = [], searchResults = [], t0;
+	var playlist = [], searchResults = [], t0;
 	bs.css('youtube.css');
-	if(bs.DETECT.local){
-		if( t0 = window.localStorage.getItem('playlist') ){
-			playlist = t0.split(',');
-		}
-		if( t0 = window.localStorage.getItem('searchResult') ){
-			searchResults = t0.split(',');
-		}
-		(function(){
-			var videoId, videoIdx;
-			var len = playlist.length;
-			console.log(len)
-			for (var i=0; i<len; i++) {
-				videoId = playlist[i];
-				videoIdx = searchResults.indexOf(videoId);
-				bs.Dom('#playlists').S('>',
-					bs.tmpl( "<li class='playlist' data-video-id='@1@'>" +
-							'<img align="left" src="@2@" title="@3@" alt="@4@">@5@' +
-						"</li>",
-						{"1":videoId,"2":searchResults[++videoIdx],"3":searchResults[++videoIdx],"4":searchResults[videoIdx],"5":searchResults[videoIdx]}
-					)
-				);
-			};
-			bs.Dom('@li.playlist').S( 'click', function(){
-				var classes = bs.Dom(this).S('class').split(' ');
-				if( classes.indexOf('on') > -1 ){ bs.Dom(this).S('class-', 'on');}
-				else{ bs.Dom(this).S('class+', 'on');}
-			} );
-			player.cuePlaylist( playlist, 0, 0, 'default');
-			bs.Dom('#play i').S('class-', 'fa-pause', 'class+', 'fa-play');
-		})();
+	if( t0 = bs.save('playlist') ){
+		playlist = t0.split(',');
 	}
+	if( t0 = bs.save('searchResult') ){
+		searchResults = t0.split(',');
+	}
+	(function(){
+		var videoId, videoIdx;
+		var len = playlist.length;
+		console.log(len)
+		for (var i=0; i<len; i++) {
+			videoId = playlist[i];
+			videoIdx = searchResults.indexOf(videoId);
+			bs.Dom('#playlists').S('>',
+				bs.tmpl( "<li class='playlist' data-video-id='@1@'>" +
+						'<img align="left" src="@2@" title="@3@" alt="@4@">@5@' +
+					"</li>",
+					{"1":videoId,"2":searchResults[++videoIdx],"3":searchResults[++videoIdx],"4":searchResults[videoIdx],"5":searchResults[videoIdx]}
+				)
+			);
+		};
+		bs.Dom('@li.playlist').S( 'click', function(){
+			var classes = bs.Dom(this).S('class').split(' ');
+			if( classes.indexOf('on') > -1 ){ bs.Dom(this).S('class-', 'on');}
+			else{ bs.Dom(this).S('class+', 'on');}
+		} );
+		player.cuePlaylist( playlist, 0, 0, 'default'); // TODO
+		bs.Dom('#play i').S('class-', 'fa-pause', 'class+', 'fa-play');
+	})();
 	bs.Dom('#search').S('submit', function(ev){
 		//console.log(ev);
 		// 검색키워드로 Youtube검색
@@ -97,18 +94,6 @@ bs(function(){
 					searchResults.push(title);
 				}
 				if( type != 'youtube#video' ) continue;
-				// 표시
-				/*
-				$('#list').append(
-					$("<li class='movie'>").append(
-						$("<img>").attr({
-							'src': thumbD,
-							'title':title,
-							'alt':title
-						})
-					).data('video-id', videoId)
-				);
-				*/
 				bs.Dom('#searchResults').S('>',
 					bs.tmpl( "<li class='results' data-video-id='@1@'>" +
 							'<img align="left" src="@2@" title="@3@" alt="@4@">@5@' +
@@ -118,9 +103,6 @@ bs(function(){
 				);
 			}
 			bs.Dom('@li.results').S( 'click', function(){
-				//player.loadVideoById( $(this).data('video-id') );
-				// hasClass가 없어!!!!!!!!!
-				// toggleClass도 없어!!!!!!!
 				var classes = bs.Dom(this).S('class').split(' ');
 				if( classes.indexOf('on') > -1 ){ bs.Dom(this).S('class-', 'on');}
 				else{ bs.Dom(this).S('class+', 'on');}
@@ -183,10 +165,8 @@ bs(function(){
 			else{ bs.Dom(this).S('class+', 'on');}
 		} );
 		console.log(playlist);
-		if(bs.DETECT.local){
-			window.localStorage.setItem('playlist', playlist);
-			window.localStorage.setItem('searchResult', searchResults);
-		}
+		bs.save('playlist', playlist);
+		bs.save('searchResult', searchResults);
 		player.cuePlaylist( playlist, 0, 0, 'default');
 		bs.Dom('#play i').S('class-', 'fa-pause', 'class+', 'fa-play');
 	}
@@ -216,10 +196,10 @@ bs(function(){
 			if( classes.indexOf('on') > -1 ){ bs.Dom(this).S('class-', 'on');}
 			else{ bs.Dom(this).S('class+', 'on');}
 		} );
-		if(bs.DETECT.local){
-			window.localStorage.setItem('playlist', playlist);
-			window.localStorage.setItem('searchResult', searchResults);
-		}
+		bs.save('playlist', playlist);
+		bs.save('searchResult', searchResults);
+		player.cuePlaylist( playlist, 0, 0, 'default');
+		bs.Dom('#play i').S('class-', 'fa-pause', 'class+', 'fa-play');
 	});
 	bs.Dom('#prevPL').S( 'click', function(){
 		player.previousVideo();

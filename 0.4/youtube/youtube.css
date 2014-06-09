@@ -62,7 +62,8 @@ li.playlist img, li.results img{
 }
 #prevPL, #nextPL{
 	width:100px;
-	height:100px;
+	height:60px;
+	border-radius:50px;
 }
 #play{
 	margin:10px;
