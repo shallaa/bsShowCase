@@ -6,29 +6,40 @@
 	https://developers.google.com/youtube/iframe_api_reference
 */
 var player, app;
-function onYouTubeIframeAPIReady() {
+function onYouTubeIframeAPIReady(){
 	player = new YT.Player('player', {
 		height: '360',
 		width: '640',
 		videoId: 'nQm_9nbY_7U',
+		playerVars:{
+			"loop" : 1
+		},
 		events: {
-			'onReady': onPlayerReady,
-			'onStateChange': onPlayerStateChange
+			//'onReady': onPlayerReady,
+			'onStateChange': onPlayerStateChange,
+			'onError': function(event){
+				switch(event.data){
+					case 2:alert('요청한 동영상ID가 잘못되었습니다.'); break; 
+					case 5:alert('요청한 콘텐츠를 HTML5 플레이어에서 재생할 수 없습니다.'); break; 
+					case 100: alert('요청한 동영상을 찾을 수 없습니다.'); break;
+					case 101:
+					case 150:alert('요청한 동영상의 소유자가 내장 플레이어에서 동영상을 재생하는 것을 허용하지 않습니다.'); break;
+				}
+				player.nextVideo();
+			}
 		}
 	});
 }
 
-function onPlayerReady(event) {
-	//event.target.playVideo();
-	player.setLoop(true);
-	//player.setShuffle(true);
+function onPlayerReady(event){
 }
 
-function onPlayerStateChange(event) {
+function onPlayerStateChange(event){
 	var els;
+	player.setLoop(true);
+	//player.setShuffle(true);
 	if( event.data == YT.PlayerState.ENDED ){
-		player.nextVideo();
-	}else	if( event.data == YT.PlayerState.PLAYING){
+	}else	if( event.data == YT.PlayerState.PLAYING ){
 		bs.Dom('@li.playlist').S('class-', 'playing');
 		els = bs.Dom('@li.playlist');
 		for(var i = 0; i < els.length; i++){
@@ -36,17 +47,26 @@ function onPlayerStateChange(event) {
 				bs.Dom( els[i] ).S('class+', 'playing');
 			}
 		}
+	}else if( event.data == YT.PlayerState.CUED ){
+		
 	}
 }
 bs.plugin( 'save', 'last' );
 bs(function(){
+	if( !player ) bs.reload();
+	if( bs.DETECT.os.charAt(0) == 'i' ){
+		bs.Dom('#menuDiv').S('width', 250);
+		bs.Dom('#controlBox').S(null);
+	}else if(bs.DETECT.os == 'android'){
+		bs.Dom('#play').S('visibility', 'hidden');
+	}
 	var playlist = [], searchResults = [], t0;
 	bs.css('youtube.css');
 	if( t0 = bs.save('playlist') ){
-		playlist = t0.split(',');
+		playlist = t0;
 	}
 	if( t0 = bs.save('searchResult') ){
-		searchResults = t0.split(',');
+		searchResults = t0;
 	}
 	(function(){
 		var videoId, videoIdx;
@@ -56,11 +76,10 @@ bs(function(){
 			videoId = playlist[i];
 			videoIdx = searchResults.indexOf(videoId);
 			bs.Dom('#playlists').S('>',
-				bs.tmpl( "<li class='playlist' data-video-id='@1@'>" +
-						'<img align="left" src="@2@" title="@3@" alt="@4@">@5@' +
-					"</li>",
-					{"1":videoId,"2":searchResults[++videoIdx],"3":searchResults[++videoIdx],"4":searchResults[videoIdx],"5":searchResults[videoIdx]}
-				)
+				bs.Dom('<li>').S('class+', 'playlist', '@data-video-id', videoId, '>',
+					bs.Dom('<img>').S('@align', 'left', '@src', searchResults[++videoIdx], '@title', searchResults[++videoIdx],
+					'@alt', searchResults[videoIdx], 'this'),
+				'html+', searchResults[videoIdx], 'this')
 			);
 		};
 		bs.Dom('@li.playlist').S( 'click', function(){
@@ -68,8 +87,12 @@ bs(function(){
 			if( classes.indexOf('on') > -1 ){ bs.Dom(this).S('class-', 'on');}
 			else{ bs.Dom(this).S('class+', 'on');}
 		} );
-		player.cuePlaylist( playlist, 0, 0, 'default'); // TODO
-		bs.Dom('#play i').S('class-', 'fa-pause', 'class+', 'fa-play');
+		if( bs.DETECT.os.charAt(0) != 'i' ){
+			player.cuePlaylist( playlist, 0, 0, 'default');
+		}else{
+			player.cuePlaylist( playlist, 0, 0, 'default'); return;
+		}
+		if( bs.DETECT.os.charAt(0) != 'i' ) bs.Dom('#play i').S('class-', 'fa-pause', 'class+', 'fa-play');
 	})();
 	bs.Dom('#search').S('submit', function(ev){
 		//console.log(ev);
@@ -88,18 +111,17 @@ bs(function(){
 				thumbD = item.snippet.thumbnails.default.url,
 				thumbH = item.snippet.thumbnails.high.url,
 				thumbM = item.snippet.thumbnails.medium.url;
-				if( !searchResults.indexOf(videoId) > -1 ){
+				if( searchResults.indexOf(videoId) < 0 ){
 					searchResults.push(videoId);
 					searchResults.push(thumbD);
 					searchResults.push(title);
 				}
 				if( type != 'youtube#video' ) continue;
 				bs.Dom('#searchResults').S('>',
-					bs.tmpl( "<li class='results' data-video-id='@1@'>" +
-							'<img align="left" src="@2@" title="@3@" alt="@4@">@5@' +
-						"</li>",
-						{"1":videoId,"2":thumbD,"3":title,"4":title,"5":title}
-					)
+					bs.Dom('<li>').S('class+', 'results', '@data-video-id', videoId, '>',
+						bs.Dom('<img>').S('@align', 'left', '@src', thumbD, '@title', title,
+						'@alt', title, 'this'),
+					'html+', title, 'this')
 				);
 			}
 			bs.Dom('@li.results').S( 'click', function(){
@@ -129,18 +151,23 @@ bs(function(){
 		bs.Dom(this).S('class+', 'pure-menu-selected');
 		bs.Dom('#q').S('f');
 	});
-	bs.Dom('#play').S( 'click', function(){
-		if( bs.Dom('#play i').S('class').indexOf('fa-play') > -1 ){
-			player.playVideo();
-			bs.Dom('#play i').S('class-', 'fa-play', 'class+', 'fa-pause');
-		}else{
-			// 시작되지 않음(-1), 종료됨(0), 재생 중(1), 일시중지(2), 버퍼링(3), 동영상 신호(5)
-			if( player.getPlayerState() == 2 )
-				player.playVideo(), bs.Dom('#play i').S('class-', 'fa-play', 'class+', 'fa-pause');
-			else
-				player.pauseVideo(), bs.Dom('#play i').S('class-', 'fa-pause', 'class+', 'fa-play');
-		}
-	});
+	if( bs.DETECT.os.charAt(0) != 'i' ){
+		bs.Dom('#play').S( 'click', function(){
+			if( !player.getPlaylist() && playlist.length ){
+				
+			}
+			if( bs.Dom('#play i').S('class').indexOf('fa-play') > -1 ){
+				player.playVideo();
+				bs.Dom('#play i').S('class-', 'fa-play', 'class+', 'fa-pause');
+			}else{
+				// 시작되지 않음(-1), 종료됨(0), 재생 중(1), 일시중지(2), 버퍼링(3), 동영상 신호(5)
+				if( player.getPlayerState() == 2 )
+					player.playVideo(), bs.Dom('#play i').S('class-', 'fa-play', 'class+', 'fa-pause');
+				else
+					player.pauseVideo(), bs.Dom('#play i').S('class-', 'fa-pause', 'class+', 'fa-play');
+			}
+		});
+	}
 	function savePlaylist(){
 		var videoId, videoIdx;
 		var videos = bs.Dom('@li.results.on');
@@ -152,11 +179,10 @@ bs(function(){
 			else continue;
 			videoIdx = searchResults.indexOf(videoId);
 			bs.Dom('#playlists').S('>',
-				bs.tmpl( "<li class='playlist' data-video-id='@1@'>" +
-						'<img align="left" src="@2@" title="@3@" alt="@4@">@5@' +
-					"</li>",
-					{"1":videoId,"2":searchResults[++videoIdx],"3":searchResults[++videoIdx],"4":searchResults[videoIdx],"5":searchResults[videoIdx]}
-				)
+				bs.Dom('<li>').S('class+', 'playlist', '@data-video-id', videoId, '>',
+					bs.Dom('<img>').S('@align', 'left', '@src', searchResults[++videoIdx], '@title', searchResults[++videoIdx],
+					'@alt', searchResults[videoIdx], 'this'),
+				'html+', searchResults[videoIdx], 'this')
 			);
 		}
 		bs.Dom('@li.playlist').S( 'click', function(){
@@ -168,7 +194,7 @@ bs(function(){
 		bs.save('playlist', playlist);
 		bs.save('searchResult', searchResults);
 		player.cuePlaylist( playlist, 0, 0, 'default');
-		bs.Dom('#play i').S('class-', 'fa-pause', 'class+', 'fa-play');
+		if( bs.DETECT.os.charAt(0) != 'i' ) bs.Dom('#play i').S('class-', 'fa-pause', 'class+', 'fa-play');
 	}
 	bs.Dom('#btPlaylist').S( 'click', savePlaylist);
 	bs.Dom('#btTrash').S( 'click', function(){
@@ -184,11 +210,10 @@ bs(function(){
 		for(var i=0; i<len; i++) {
 			videoIdx = searchResults.indexOf(playlist[i]);
 			bs.Dom('#playlists').S('>',
-				bs.tmpl( "<li class='playlist' data-video-id='@1@'>" +
-						'<img align="left" src="@2@" title="@3@" alt="@4@">@5@' +
-					"</li>",
-					{"1":videoId,"2":searchResults[++videoIdx],"3":searchResults[++videoIdx],"4":searchResults[videoIdx],"5":searchResults[videoIdx]}
-				)
+				bs.Dom('<li>').S('class+', 'playlist', '@data-video-id', videoId, '>',
+					bs.Dom('<img>').S('@align', 'left', '@src', searchResults[++videoIdx], '@title', searchResults[++videoIdx],
+					'@alt', searchResults[videoIdx], 'this'),
+				'html+', searchResults[videoIdx], 'this')
 			);
 		}
 		bs.Dom('@li.playlist').S( 'click', function(){
@@ -199,12 +224,14 @@ bs(function(){
 		bs.save('playlist', playlist);
 		bs.save('searchResult', searchResults);
 		player.cuePlaylist( playlist, 0, 0, 'default');
-		bs.Dom('#play i').S('class-', 'fa-pause', 'class+', 'fa-play');
+		if( bs.DETECT.os.charAt(0) != 'i' ) bs.Dom('#play i').S('class-', 'fa-pause', 'class+', 'fa-play');
 	});
-	bs.Dom('#prevPL').S( 'click', function(){
-		player.previousVideo();
-	});
-	bs.Dom('#nextPL').S( 'click', function(){
-		player.nextVideo();
-	});
+	if( bs.DETECT.os.charAt(0) != 'i' ){
+		bs.Dom('#prevPL').S( 'click', function(){
+			player.previousVideo();
+		});
+		bs.Dom('#nextPL').S( 'click', function(){
+			player.nextVideo();
+		});
+	}
 });

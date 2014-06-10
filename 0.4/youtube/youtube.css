@@ -19,6 +19,7 @@ html, body{
 	position:absolute;
 	top:0px;
 	left:640px;
+	width:243px;
 }
 #playlist, #searchlist{
 	color:#ccc;
