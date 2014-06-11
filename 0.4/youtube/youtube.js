@@ -53,7 +53,7 @@ function onPlayerStateChange(event){
 }
 bs.plugin( 'save', 'last' );
 bs(function(){
-	if( !player ) bs.reload();
+	if( !player || !player.cuePlaylist ) bs.reload();
 	if( bs.DETECT.os.charAt(0) == 'i' ){
 		bs.Dom('#menuDiv').S('width', 250);
 		bs.Dom('#controlBox').S(null);
@@ -63,10 +63,10 @@ bs(function(){
 	var playlist = [], searchResults = [], t0;
 	bs.css('youtube.css');
 	if( t0 = bs.save('playlist') ){
-		playlist = t0;
+		playlist = typeof t0 == 'string' ? t0.split(',') : t0;
 	}
 	if( t0 = bs.save('searchResult') ){
-		searchResults = t0;
+		searchResults =  typeof t0 == 'string' ? t0.split(',') : t0;
 	}
 	(function(){
 		var videoId, videoIdx;
