@@ -69,7 +69,7 @@ app.M = {
 app.C = {
 	init : function(){
 		if( !player || !player.cuePlaylist ){
-			setTimeout( app.C.init, 100 ); return;
+			return console.log('retry'), setTimeout( app.C.init, 500 );
 		}
 		app.M.init(),
 		app.V.init( app.M.playlist, app.M.searchResults );
@@ -90,21 +90,20 @@ app.C = {
 		app.V.addPlaylist(app.M.playlist),
 		console.log(app.M.playlist),
 		app.V.clearPlaylist(),
-		bs.save( 'playlist', app.M.playlist ),
-		bs.save( 'searchResult', app.M.searchResults ),
 		app.V.drawPlaylist( app.M.playlist, app.M.searchResults ),
 		player.cuePlaylist( app.M.playlist, 0, 0, 'default'),
+		bs.save( 'playlist', app.M.playlist ),
+		bs.save( 'searchResult', app.M.searchResults ),
 		app.V.makePlaybt();
 	},
 	deletePlaylist : function(){
 		app.V.deletePlaylist( app.M.playlist ),
 		console.log(app.M.playlist),
 		app.V.clearPlaylist(),
-		bs.save( 'playlist', app.M.playlist ),
-		bs.save( 'searchResult', app.M.searchResults ),
-		
 		app.V.drawPlaylist( app.M.playlist, app.M.searchResults ),
 		player.cuePlaylist( app.M.playlist, 0, 0, 'default'),
+		bs.save( 'playlist', app.M.playlist ),
+		bs.save( 'searchResult', app.M.searchResults ),
 		app.V.makePlaybt();
 	}
 }
@@ -202,9 +201,8 @@ app.V = {
 	},
 	drawSearchList : function( rs, searchResults ){
 		var item, type, videoId, title, thumbD, thumbH, thumbM, i, j;
-		rs = JSON.parse(rs),
-		console.log(rs),
-		bs.Dom('#searchResults').S( 'html', '' );
+		bs.Dom('#searchResults').S( 'html', '' ),
+		rs = JSON.parse(rs);
 		for( i = 0, j = rs.items.length; i < j; i++ ){
 			item = rs.items[i],
 			type = item.id.kind, // youtube#video
