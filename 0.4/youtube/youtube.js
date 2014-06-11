@@ -112,7 +112,7 @@ app.C = {
 app.V = {
 	init : function( playlist, searchResults ){
 		bs.css('youtube.css');
-		if( !player || !player.cuePlaylist ) bs.reload();
+		if( !player || !player.cuePlaylist ) setTimeout( bs.C.init, 500 );
 		if( bs.DETECT.os.charAt(0) == 'i' ){
 			bs.Dom('#menuDiv').S('width', 250);
 			bs.Dom('#controlBox').S(null);
