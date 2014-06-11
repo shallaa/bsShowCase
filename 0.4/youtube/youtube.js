@@ -87,11 +87,11 @@ app.C = {
 			"key", "AIzaSyAkz-K8M2YGdbHvBiyVHvgwKM-MMeQtwfo" );
 	},
 	savePlaylist : function(){
-		app.V.addPlaylist( app.M.playlist, app.M.searchResults ),
+		app.V.addPlaylist(app.M.playlist),
 		console.log(app.M.playlist),
+		app.V.clearPlaylist(),
 		bs.save( 'playlist', app.M.playlist ),
 		bs.save( 'searchResult', app.M.searchResults ),
-		
 		app.V.drawPlaylist( app.M.playlist, app.M.searchResults ),
 		player.cuePlaylist( app.M.playlist, 0, 0, 'default'),
 		app.V.makePlaybt();
@@ -175,7 +175,7 @@ app.V = {
 	clearPlaylist : function(){
 		bs.Dom('#playlists').S( 'html', '' );
 	},
-	addPlaylist : function(playlist, searchResults){
+	addPlaylist : function(playlist){
 		var videoId, videoIdx, i, j,
 			videos = bs.Dom('@li.results.on');
 		for( i = 0, j = videos.length; i < j ; i++ ){
