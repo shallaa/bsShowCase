@@ -68,6 +68,9 @@ app.M = {
 // C
 app.C = {
 	init : function(){
+		if( !player || !player.cuePlaylist ){
+			setTimeout( app.C.init, 100 ); return;
+		}
 		app.M.init(),
 		app.V.init( app.M.playlist, app.M.searchResults );
 	},
@@ -112,7 +115,6 @@ app.C = {
 app.V = {
 	init : function( playlist, searchResults ){
 		bs.css('youtube.css');
-		if( !player || !player.cuePlaylist ) setTimeout( app.C.init, 500 );
 		if( bs.DETECT.os.charAt(0) == 'i' ){
 			bs.Dom('#menuDiv').S('width', 250);
 			bs.Dom('#controlBox').S(null);
